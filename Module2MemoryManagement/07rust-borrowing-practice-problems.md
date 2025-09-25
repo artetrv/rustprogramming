@@ -1,7 +1,3 @@
-// Rust comments:
-//  - Line comment: starts with // and goes to end of line
-//  - Block comment: /* ... */ can span multiple lines
-
 // ---------------- Problem #1 ----------------
 // Borrow two Strings (no ownership taken) and return a new concatenated String.
 fn concat_strings(s1: &String, s2: &String) -> String {
