@@ -1,62 +1,54 @@
-# Rust Borrowing and Ownership Practice Problems
+// Rust comments:
+//  - Line comment: starts with // and goes to end of line
+//  - Block comment: /* ... */ can span multiple lines
 
-## Warm-up In-Class Practice
-
-### Problem #1: String Concatenation with Borrowing
-
-Write a function that concatenates two strings without taking ownership, i.e., by borrowing.
-
-```rust
+// ---------------- Problem #1 ----------------
+// Borrow two Strings (no ownership taken) and return a new concatenated String.
 fn concat_strings(s1: &String, s2: &String) -> String {
-    // Your code here
+    // We borrow s1 and s2 and build a new owned String as the result.
+    // Either of these would be fine:
+    // format!("{}{}", s1, s2)
+    // or:
+    let mut out = String::with_capacity(s1.len() + s2.len());
+    out.push_str(s1);
+    out.push_str(s2);
+    out
 }
 
+// ---------------- Problem #2 ----------------
+// Borrow a String, clone it, modify the clone, and return the modified clone.
+fn clone_and_modify(s: &String) -> String {
+    let mut cloned = s.clone();      // make an owned copy; original is untouched
+    cloned.push_str("World!");       // append to the clone only
+    cloned
+}
+
+// ---------------- Problem #3 ----------------
+// Write the sum of integers from low..=high into a caller-provided mutable slot.
+fn sum(total: &mut i32, low: i32, high: i32) {
+    // Make the function deterministic regardless of the caller's initial value.
+    *total = 0;
+    for i in low..=high {
+        *total += i;                 // mutate through the &mut reference
+    }
+}
+
+// ---------------- Run all three in one main ----------------
 fn main() {
+    // Problem #1 demo
     let s1 = String::from("Hello, ");
     let s2 = String::from("World!");
     let result = concat_strings(&s1, &s2);
-    println!("{}", result); // Should print: "Hello, World!"
+    println!("Problem 1 -> {}", result); // Expect: Hello, World!
+
+    // Problem #2 demo
+    let base = String::from("Hello, ");
+    let modified = clone_and_modify(&base);
+    println!("Problem 2 -> Original: {}", base);     // Expect: Hello, 
+    println!("Problem 2 -> Modified: {}", modified); // Expect: Hello, World!
+
+    // Problem #3 demo
+    let mut total = 0;
+    sum(&mut total, 0, 100);
+    println!("Problem 3 -> Sum 0..=100 = {}", total); // Expect: 5050
 }
-```
-
-### Problem #2: Clone and Modify
-
-Given a string, clone it and modify the cloned string by appending a new word. Print both the original string and the cloned, modified string to show that the original has not been changed.
-
-```rust
-fn clone_and_modify(s: &String) -> String {
-    // Your code here
-}
-
-fn main() {
-    let s = String::from("Hello, ");
-    let modified = clone_and_modify(&s);
-    println!("Original: {}", s); // Should print: "Original: Hello, "
-    println!("Modified: {}", modified); // Should print: "Modified: Hello, World!"
-}
-```
-
-### Problem #3: Mutable Reference Sum
-
-Write a modified sum function that takes a mutable reference for the destination of the sum from low to high.
-
-```rust
-#[allow(unused_variables, unused_mut)]
-fn sum(total: &mut i32, low: i32, high: i32) {
-    // Write your code here!
-    0
-}
-
-fn main() {
-    // create necessary variables and test your function for low 0 high 100
-    // total should be 5050
-}
-```
-
-## Instructions
-
-1. Implement the functions for each problem.
-2. Make sure your code compiles without errors.
-3. Test your implementations with the provided `main` functions and verify the output.
-
-Remember to use Rust's borrowing rules correctly and think about how ownership is managed in each scenario.
