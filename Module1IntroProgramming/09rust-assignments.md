@@ -1,6 +1,4 @@
-# Rust Programming Assignments
-
-## Assignment 1: Temperature Converter
+/*  Rust Programming Assignments
 
 Create a Rust program that converts temperatures between Fahrenheit and Celsius. The program should:
 
@@ -12,9 +10,31 @@ Create a Rust program that converts temperatures between Fahrenheit and Celsius.
    - Declare a mutable variable with a temperature in Fahrenheit
    - Convert it to Celsius using your function and print the result
    - Use a loop to convert and print the next 5 integer temperatures (e.g., if you start with 32°F, print conversions for 33°F, 34°F, 35°F, 36°F, and 37°F)
+*/
+const FREEZING_POINT_F: f64 = 32.0;
 
+fn fahrenheit_to_celsius(f: f64) -> f64 {
+    (f - 32.0) * 5.0 / 9.0
+}
 
-## Assignment 2: Number Analyzer
+fn celsius_to_fahrenheit(c: f64) -> f64 {
+    (c * 9.0 / 5.0) + 32.0
+}
+
+fn main() {
+    let mut fahrenheit_temp: f64 = FREEZING_POINT_F;
+
+    let celsius_temp = fahrenheit_to_celsius(fahrenheit_temp);
+    println!("{:.1}°F = {:.1}°C", fahrenheit_temp, celsius_temp);
+
+    for _ in 0..5 {
+        fahrenheit_temp += 1.0;
+        let celsius_temp = fahrenheit_to_celsius(fahrenheit_temp);
+        println!("{:.1}°F = {:.1}°C", fahrenheit_temp, celsius_temp);
+    }
+}
+
+/* Assignment 2: Number Analyzer
 
 Create a Rust program that analyzes a series of numbers. The program should:
 
@@ -26,9 +46,52 @@ Create a Rust program that analyzes a series of numbers. The program should:
    - If the number is divisible by 5, print "Buzz" instead
    - If it's divisible by both 3 and 5, print "FizzBuzz"
 4. Use a while loop to find and print the sum of all numbers in the array.
-5. Use a loop to find and print the largest number in the array.
+5. Use a loop to find and print the largest number in the array. */
 
-## Assignment 3: Guessing Game
+    fn is_even(n: i32) -> bool {
+    n % 2 == 0
+}
+
+fn main() {
+    let numbers: [i32; 10] = [3, 5, 10, 12, 15, 18, 20, 25, 30, 33];
+
+    for &num in numbers.iter() {
+        if is_even(num) {
+            print!("{} is Even", num);
+        } else {
+            print!("{} is Odd", num);
+        }
+
+        if num % 3 == 0 && num % 5 == 0 {
+            println!(" -> FizzBuzz");
+        } else if num % 3 == 0 {
+            println!(" -> Fizz");
+        } else if num % 5 == 0 {
+            println!(" -> Buzz");
+        } else {
+            println!();
+        }
+    }
+
+    let mut index = 0;
+    let mut sum = 0;
+    while index < numbers.len() {
+        sum += numbers[index];
+        index += 1;
+    }
+    println!("\nSum of all numbers: {}", sum);
+
+    let mut largest = numbers[0];
+    for &num in numbers.iter() {
+        if num > largest {
+            largest = num;
+        }
+    }
+    println!("Largest number in the array: {}", largest);
+}
+
+
+/* Assignment 3: Guessing Game
 
 Create a simple number guessing game in Rust. The program should:
 
@@ -45,6 +108,46 @@ Create a simple number guessing game in Rust. The program should:
      - If the guess was correct, break the loop
    - After the loop ends, print how many guesses it took (you'll need to track this in a variable)
 
-These assignments strictly use only the concepts covered in the provided materials: variables, mutability, basic data types (integers, booleans), arrays, functions, if-else expressions, and the three types of loops (loop, while, for). 
+These assignments strictly use only the concepts covered in the provided materials: variables, mutability, basic data types (integers, booleans), arrays, functions, if-else expressions, and the three types of loops (loop, while, for). */
 
+fn check_guess(guess: i32, secret: i32) -> i32 {
+    if guess == secret {
+        0
+    } else if guess > secret {
+        1
+    } else {
+        -1
+    }
+}
 
+fn main() {
+    let mut secret: i32 = 27;
+
+    let guesses: [i32; 8] = [10, 40, 25, 27, 30, 15, 28, 26];
+
+    let mut attempts = 0;
+    let mut found = false;
+
+    for &g in guesses.iter() {
+        let mut guess = g;
+        attempts += 1;
+
+        let result = check_guess(guess, secret);
+
+        if result == 0 {
+            println!("Guess {}: {} → Correct!", attempts, guess);
+            found = true;
+            break;
+        } else if result == 1 {
+            println!("Guess {}: {} → Too high", attempts, guess);
+        } else {
+            println!("Guess {}: {} → Too low", attempts, guess);
+        }
+    }
+
+    if found {
+        println!("You found the secret ({}) in {} guesses.", secret, attempts);
+    } else {
+        println!("Out of guesses. Secret was {}. Total attempts: {}", secret, attempts);
+    }
+}
