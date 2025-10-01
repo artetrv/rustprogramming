@@ -1,0 +1,26 @@
+#[derive(Debug, Clone)]
+struct Student {
+    name: String,
+    major: String,
+}
+
+impl Student {
+    fn new(name: impl Into<String>, major: impl Into<String>) -> Self {
+        Self { name: name.into(), major: major.into() }
+    }
+    fn set_major(&mut self, new_major: impl Into<String>) {
+        self.major = new_major.into();
+    }
+    fn get_major(&self) -> &str {
+        &self.major
+    }
+}
+fn main() {
+    let mut s = Student::new("Artemisa Trevino", "Computer Engineering");
+    println!("Before:  {:?}", s);
+
+    s.set_major("Computer Science");
+    println!("Major now: {}", s.get_major());
+
+    println!("After:   {:?}", s);
+}
